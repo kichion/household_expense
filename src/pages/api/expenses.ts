@@ -1,14 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import type { Subject } from 'src/features/subjects'
+import type { Expense } from 'src/features/expenses'
 import type { New } from 'src/types/feature'
 
 import { supabase } from 'src/lib/supabase-client'
 
 import { createResponse } from '.'
 
-const table = 'subjects'
+const table = 'expenses'
 
-const getSubjects = async (
+const getExpenses = async (
   _: NextApiRequest,
   res: NextApiResponse,
 ): Promise<void> => {
@@ -17,16 +17,16 @@ const getSubjects = async (
   return res.status(status).json(data)
 }
 
-export const createSubject = async (subject: New<Subject>) => {
-  return await supabase.from(table).insert(subject)
+export const createExpense = async (expense: New<Expense>) => {
+  return await supabase.from(table).insert(expense)
 }
 
-export const updateSubject = async (subject: Subject) => {
-  return await supabase.from(table).update(subject).match({ id: subject.id })
+export const updateExpense = async (expense: Expense) => {
+  return await supabase.from(table).update(expense).match({ id: expense.id })
 }
 
-export const deleteSubject = async (id: Subject['id']) => {
+export const deleteExpense = async (id: Expense['id']) => {
   return await supabase.from(table).delete().match({ id })
 }
 
-export default getSubjects
+export default getExpenses
