@@ -2,31 +2,31 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import type { Expense } from 'src/features/expenses'
 import type { New } from 'src/types/feature'
 
-import { supabase } from 'src/lib/supabase-client'
-
-import { createResponse } from '.'
+import { get, create, update, remove, fetcher } from '.'
 
 const table = 'expenses'
+
+export const expenseFinder = (url: string) => fetcher<Expense[]>(url)
 
 const getExpenses = async (
   _: NextApiRequest,
   res: NextApiResponse,
 ): Promise<void> => {
-  const queryResult = await supabase.from(table).select()
-  const { status, data } = createResponse(queryResult.data, queryResult.error)
-  return res.status(status).json(data)
+  const data = await get(table, res, 'id, date, value')
+  console.info(data)
+  return data
 }
 
 export const createExpense = async (expense: New<Expense>) => {
-  return await supabase.from(table).insert(expense)
+  return await create(table, expense)
 }
 
 export const updateExpense = async (expense: Expense) => {
-  return await supabase.from(table).update(expense).match({ id: expense.id })
+  return await update(table, expense)
 }
 
 export const deleteExpense = async (id: Expense['id']) => {
-  return await supabase.from(table).delete().match({ id })
+  return await remove(table, id)
 }
 
 export default getExpenses

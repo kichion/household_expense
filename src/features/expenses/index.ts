@@ -4,9 +4,13 @@ import type { User } from 'src/features/users'
 
 export type ExpenseBase = {
   value: number
+  subjectId: number
+  householdExpenseId: number
+  authorId: string
 
   /* foreign */
-  subject: Subject
+  subject?: Subject
+  // CRUD dependence
   householdExpense?: HouseholdExpense
   author?: User
 }

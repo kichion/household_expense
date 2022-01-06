@@ -11,11 +11,11 @@ import { Button } from '@supabase/ui'
 import { Alert } from 'src/components/alert'
 import { Breadcrumbs } from 'src/components/breadcrumbs'
 import { useRedirectAuth } from 'src/hooks/auth'
-import { fetcher } from 'src/pages/api'
+import { subjectFinder } from 'src/pages/api/subjects'
 
 const Subjects: NextPage = () => {
   const done = useRedirectAuth()
-  const { data, error } = useSWR('/api/subjects', fetcher)
+  const { data, error } = useSWR<Subject[]>('/api/subjects', subjectFinder)
 
   return (
     <Box
