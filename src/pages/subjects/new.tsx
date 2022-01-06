@@ -16,7 +16,7 @@ import { New } from 'src/types/feature'
 
 const NewSubject: NextPage = () => {
   const { push } = useRouter()
-  const done = useRedirectAuth()
+  const { done } = useRedirectAuth()
   const {
     handleSubmit,
     register,

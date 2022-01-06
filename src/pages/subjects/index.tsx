@@ -14,7 +14,7 @@ import { useRedirectAuth } from 'src/hooks/auth'
 import { subjectFinder } from 'src/pages/api/subjects'
 
 const Subjects: NextPage = () => {
-  const done = useRedirectAuth()
+  const { done } = useRedirectAuth()
   const { data, error } = useSWR<Subject[]>('/api/subjects', subjectFinder)
 
   return (
