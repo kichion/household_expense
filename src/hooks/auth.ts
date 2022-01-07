@@ -1,9 +1,10 @@
-import type { User } from '@supabase/supabase-js'
+import type { AuthChangeEvent, Session, User } from '@supabase/supabase-js'
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
 import { Auth } from '@supabase/ui'
+import { supabase } from 'src/lib/supabase-client'
 
 export type VerifyAuth = {
   done: boolean
@@ -28,4 +29,35 @@ export const useRedirectAuth = (
   }, [isReady, user, needAuth, replace])
 
   return { done, user }
+}
+
+const postAuth = (event: AuthChangeEvent, session: Session | null) => {
+  if (event === 'TOKEN_REFRESHED' && !session) {
+    event = 'SIGNED_IN'
+  }
+  fetch('/api/auth', {
+    method: 'POST',
+    headers: new Headers({ 'Content-Type': 'application/json' }),
+    credentials: 'same-origin',
+    body: JSON.stringify({ event, session }),
+  })
+    .then((res) => res.json())
+    .catch((err) => {
+      throw new Error(err.message)
+    })
+}
+
+export const useApiAccessToken = (): void => {
+  const session = supabase.auth.session()
+  postAuth('SIGNED_IN', session)
+
+  useEffect(() => {
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (event, session) => postAuth(event, session),
+    )
+
+    return () => {
+      authListener?.unsubscribe()
+    }
+  }, [])
 }

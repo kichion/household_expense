@@ -9,12 +9,10 @@ const table = 'expenses'
 export const expenseFinder = (url: string) => fetcher<Expense[]>(url)
 
 const getExpenses = async (
-  _: NextApiRequest,
+  req: NextApiRequest,
   res: NextApiResponse,
 ): Promise<void> => {
-  const data = await get(table, res, 'id, date, value')
-  console.info(data)
-  return data
+  return await get(table, res, req, 'id, date, value')
 }
 
 export const createExpense = async (expense: New<Expense>) => {

@@ -9,10 +9,10 @@ const table = 'fixed_expense_dates'
 export const fixedExpenseDateFinder = (url: string) => fetcher<FixedExpenseDate[]>(url)
 
 const getFixedExpenseDates = async (
-  _: NextApiRequest,
+  req: NextApiRequest,
   res: NextApiResponse,
 ): Promise<void> => {
-  return await get(table, res)
+  return await get(table, res, req)
 }
 
 export const createFixedExpenseDate = async (

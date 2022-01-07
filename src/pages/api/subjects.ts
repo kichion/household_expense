@@ -9,10 +9,10 @@ const table = 'subjects'
 export const subjectFinder = (url: string) => fetcher<Subject[]>(url)
 
 const getSubjects = async (
-  _: NextApiRequest,
+  req: NextApiRequest,
   res: NextApiResponse,
 ): Promise<void> => {
-  return get(table, res)
+  return get(table, res, req)
 }
 
 export const createSubject = async (subject: New<Subject>) => {

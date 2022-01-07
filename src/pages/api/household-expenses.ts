@@ -12,10 +12,10 @@ export const householdExpenseFinder = (url: string) =>
   fetcher<HouseholdExpense[]>(url)
 
 const getHouseholdExpenses = async (
-  _: NextApiRequest,
+  req: NextApiRequest,
   res: NextApiResponse,
 ): Promise<void> => {
-  return await get(table, res)
+  return await get(table, res, req)
 }
 
 export const createHouseholdExpense = async (

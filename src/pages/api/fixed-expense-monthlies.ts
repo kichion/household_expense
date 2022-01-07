@@ -10,10 +10,10 @@ export const fixedExpenseMonthlyFinder = (url: string) =>
   fetcher<FixedExpenseMonthly[]>(url)
 
 const getFixedExpenseMonthlies = async (
-  _: NextApiRequest,
+  req: NextApiRequest,
   res: NextApiResponse,
 ): Promise<void> => {
-  return await get(table, res)
+  return await get(table, res, req)
 }
 
 export const createFixedExpenseMonthly = async (

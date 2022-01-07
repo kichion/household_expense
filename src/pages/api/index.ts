@@ -1,4 +1,4 @@
-import type { NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next'
 import type { New } from 'src/types/feature'
 
 import { PostgrestError } from '@supabase/supabase-js'
@@ -12,15 +12,36 @@ export type response = {
   data: any
 }
 
+// HACK: using access token what supabase Command Query in server side
+// refs: https://github.com/supabase/supabase/issues/1735
+const setAuthToken = async (token: string): Promise<string | null> => {
+  if (typeof token !== 'string') {
+    return 'Missing auth token.'
+  }
+  const { data: user, error } = await supabase.auth.api.getUser(token)
+  if (error) {
+    return error.message
+  }
+  if (!user?.id?.length || user.id.length < 1) {
+    return 'Unknown user.'
+  }
+  supabase.auth.setAuth(token)
+  return null
+}
+
 export const get = async <T extends Record<'id', number>>(
   table: string,
   res: NextApiResponse,
+  req: NextApiRequest,
   select: string = '*',
 ) => {
+  await setAuthToken(req.cookies['sb:token'])
   const queryResult = await supabase.from<T>(table).select(select)
   const { status, data } = createResponse(queryResult.data, queryResult.error)
   return res.status(status).json(data)
 }
+
+// TODO: CRUD全てにaccess tokenを混ぜる
 
 export const create = async <T extends Record<'id', number>>(
   table: string,
