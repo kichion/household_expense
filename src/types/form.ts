@@ -5,9 +5,9 @@ import {
   UseFormRegister,
 } from 'react-hook-form'
 
-export type FormBaseProps = {
-  handleSubmit: UseFormHandleSubmit<FieldValues>
-  isSubmitting: FormState<FieldValues>['isSubmitting']
-  errors: FormState<FieldValues>['errors']
-  register: UseFormRegister<FieldValues>
+export type FormBaseProps<T extends FieldValues> = {
+  handleSubmit: UseFormHandleSubmit<T>
+  isSubmitting: FormState<T>['isSubmitting']
+  errors: FormState<T>['errors']
+  register: UseFormRegister<T>
 }
